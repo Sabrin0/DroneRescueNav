@@ -7,17 +7,20 @@
 		{
 			"Name": "DroneRescueNav",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "AirSim",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
 		"MacNoEditor",
 		"WindowsNoEditor"
-	],
-	"Plugins": [
-		{
-			"Name": "AirSim",
-			"Enabled":  true
-		}
-	]  
+	]
 }
