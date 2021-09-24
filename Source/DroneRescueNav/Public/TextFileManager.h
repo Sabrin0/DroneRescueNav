@@ -18,6 +18,7 @@ class DRONERESCUENAV_API UTextFileManager : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, Category = "Custom", meta = (keywords = "Save"))
 
 	// Function Declataration
-	static bool SaveArrayText(FString SaveDirectory, FString FileName, TArray<FString> SaveText, bool AllowOverWriting); 
+	static bool SaveArrayText(FString SaveDirectory, FString FileName, TArray<FString> Location, TArray<FString> Orientation, bool AllowOverWriting);
+	// static bool SaveArrayText(FString SaveDirectory, FString FileName, TArray<FString> SaveText, bool AllowOverWriting);
 	
 };

@@ -5,7 +5,8 @@
 #include "HAL/PlatformFilemanager.h"
 #include "Runtime/Engine/Public/EngineGlobals.h"
 
-bool UTextFileManager::SaveArrayText(FString SaveDirectory, FString FileName, TArray<FString> SaveText, bool AllowOverWriting = true)
+bool UTextFileManager::SaveArrayText(FString SaveDirectory, FString FileName, TArray<FString> Location, TArray<FString> Orientation, bool AllowOverWriting = true)
+// bool UTextFileManager::SaveArrayText(FString SaveDirectory, FString FileName, TArray<FString> SaveText, bool AllowOverWriting = true)
 {
 	//Set complete path
 	SaveDirectory += "\\";
@@ -20,14 +21,14 @@ bool UTextFileManager::SaveArrayText(FString SaveDirectory, FString FileName, TA
 	}
 
 	//FString FinalString = "";
-
 	TArray<FString> Pose;
 	FString Line = "";
+	
 
-	//for (const FString& Line : SaveText)
-	for (const FString& data : SaveText)
+	// for (const FString& data : SaveText) // old
+	for (const FString& LineLocation : Location)
 	{	
-		
+		/*
 		//FinalString += Each;
 		//GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::Red, FString::Printf(TEXT("%s"), *FinalString));
 		//FinalString += LINE_TERMINATOR;
@@ -35,7 +36,16 @@ bool UTextFileManager::SaveArrayText(FString SaveDirectory, FString FileName, TA
 		Line += data;
 		Line += LINE_TERMINATOR;
 		Pose.Add(Line);
+		*/
+		Line += LineLocation;
+		for (const FString& LineOrientation : Orientation)
+		{
+			//Line += " Orientation" + LineOrientation;
+			Line += LineOrientation;
+		}
 
+		Line += LINE_TERMINATOR;
+		Pose.Add(Line);
 
 	}
 
