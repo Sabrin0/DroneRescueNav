@@ -12,9 +12,9 @@ UCLASS()
 class DRONERESCUENAV_API URightHanded : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-	UFUNCTION(BlueprintCallable, Category = "Custom", meta = (keywords = "RightHanded"))
+		UFUNCTION(BlueprintCallable, Category = "Custom", meta = (keywords = "RightHanded"))
 
-	static void RightHandedT(const FVector Location, FVector &RLocation, const FRotator Orientation, FVector &ROrientation);
-
+		//static void RightHandedT(const FVector Location, FVector &RLocation, const FRotator Orientation, FVector &ROrientation);
+		static void RightHandedT(const FVector Location, FString& RLocation, const FRotator Orientation, FString& ROrientation,  FVector LinVel, FString& RLinVel, FVector AngVel, FString& RAngVel);
 
 };

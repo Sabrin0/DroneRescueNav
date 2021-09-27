@@ -14,11 +14,11 @@ class DRONERESCUENAV_API UTextFileManager : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
-	// Callable from BluePrint
-	UFUNCTION(BlueprintCallable, Category = "Custom", meta = (keywords = "Save"))
+		// Callable from BluePrint
+		UFUNCTION(BlueprintCallable, Category = "Custom", meta = (keywords = "Save"))
 
-	// Function Declataration
-	static bool SaveArrayText(FString SaveDirectory, FString FileName, TArray<FString> Location, TArray<FString> Orientation, bool AllowOverWriting);
+		// Function Declataration
+		static bool SaveArrayText(TArray<FString> time, FString SaveDirectory, FString FileName, TArray<FString> Location, TArray<FString> Orientation, TArray<FString> LinVel, TArray<FString> AngVel, bool AllowOverWriting);
 	// static bool SaveArrayText(FString SaveDirectory, FString FileName, TArray<FString> SaveText, bool AllowOverWriting);
 	
 };
