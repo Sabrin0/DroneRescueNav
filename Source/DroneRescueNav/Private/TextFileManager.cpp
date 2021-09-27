@@ -27,7 +27,7 @@ bool UTextFileManager::SaveArrayText(TArray<FString> time, FString SaveDirectory
 	// for (const FString& data : SaveText) // old
 	for (const FString& LineTime : time)
 	{
-		Line += "dt " + LineTime;
+		Line += LineTime;
 		for (const FString& LineLocation : Location)
 		{
 			/*
@@ -39,16 +39,16 @@ bool UTextFileManager::SaveArrayText(TArray<FString> time, FString SaveDirectory
 			Line += LINE_TERMINATOR;
 			Pose.Add(Line);
 			*/
-			Line += "loc "+ LineLocation;
+			Line += LineLocation;
 			for (const FString& LineOrientation : Orientation)
 			{ 
-				Line += "Or " + LineOrientation;
+				Line += LineOrientation;
 				for (const FString& LineLinVel : LinVel)
 				{
-					Line += "LV "+ LineLinVel;
+					Line += LineLinVel;
 					for (const FString& LineAngVel : AngVel)
 					{
-						Line += "Ang "+ LineAngVel;
+						Line += LineAngVel;
 					}
 					
 				}
