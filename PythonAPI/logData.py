@@ -1,7 +1,7 @@
 import airsim
 from airsimTool import to_eularian_angles
 import numpy as np
-
+import math
 
 class Data:
     def __init__(self):
@@ -20,10 +20,9 @@ class Data:
         self.SP7_lin_vel_line = np.empty((0, 3), float)
         self.SP7_ang_vel_line = np.empty((0, 3), float)
 
-        self.Rpos = np.array(
-            [[1, 0, 0],
-             [0, -1, 0],
-             [0, 0, -1]])
+        self.Rpos = np.array([[1, 0, 0],
+                            [0, -1, 0],
+                            [0, 0, -1]])
 
         self.Ror = np.array([[1, 0, 0],
                              [0, -1, 0],
@@ -64,7 +63,8 @@ class Data:
 
 if __name__ == "__main__":
     droneData = Data()
-    while (droneData.client.getMultirotorState().timestamp / 1e9) - droneData.dt_start < 45:
+
+    while (droneData.client.getMultirotorState().timestamp / 1e9) - droneData.dt_start < 30:
         #print((droneData.client.getMultirotorState().timestamp / 1e9) - droneData.dt_start)
         #dt = np.append(dt, [droneData.dt_line], axis=0)
         droneData.time = np.append(droneData.time,
@@ -74,10 +74,14 @@ if __name__ == "__main__":
         droneData.get_position()
         droneData.get_orientation()
         droneData.get_velocities()
+        # Synch with the frame rate
 
         #if i > 100:
-            # finalData = np.append(droneData.position, droneData.orientation, axis=1)
-        np.savetxt('circular.txt', np.column_stack((droneData.time, droneData.SP7_position, droneData.SP7_orientation, droneData.SP7_lin_vel, droneData.SP7_ang_vel)), fmt='%.4f', delimiter=' ')
+        # finalData = np.append(droneData.position, droneData.orientation, axis=1)
+        np.savetxt('smooth/smooth_circular.txt', np.column_stack((droneData.time, droneData.SP7_position, droneData.SP7_orientation,
+                   droneData.SP7_lin_vel, droneData.SP7_ang_vel)), fmt='%.4f',
+                   delimiter=' ')
+
             # np.savetxt('prova.txt', droneData.position, fmt='%.s', delimiter=' ')
             #break
         # client = airsim.MultirotorClient()

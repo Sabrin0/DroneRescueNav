@@ -3,10 +3,28 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
+def mean_dt(data):
+    dt = np.empty(data.shape)
+    for rows in range(0, data.size-1):
+        if rows > (data.size):
+            break
+        dt_line = data[rows+1] - data[rows]
+        dt = np.append(dt, [dt_line], axis=0)
+
+    print(np.mean(dt, axis=0))
+
 if __name__ == '__main__':
-    data = np.loadtxt("circular.txt", dtype=float, delimiter=" ")
+
+
+
+    data = np.loadtxt("data/scaled_smooth_circular.txt", dtype=float, delimiter=" ")
+    #data = np.loadtxt("circular.txt", dtype=float, delimiter=" ")
+    #data = np.loadtxt("UnrealCircularPath.txt", dtype=float, delimiter=" ")
     #data = np.loadtxt("x5y5.txt", dtype=float, delimiter=" ")
     #data = np.loadtxt("TakeOffandCircularPath.txt", dtype=float, delimiter=" ")
+    #t = data[:,0]
+    #print(t.size)
+    #mean_dt(t)
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     ax.plot(data[:, 1], data[:, 2], data[:, 3], label='Path')
