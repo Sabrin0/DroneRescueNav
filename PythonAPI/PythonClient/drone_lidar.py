@@ -1,7 +1,6 @@
 # Python client example to get Lidar data from a drone
 #
 
-import setup_path 
 import airsim
 
 import sys

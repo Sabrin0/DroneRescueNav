@@ -27,10 +27,10 @@ void  URightHanded::RightHandedT(const FVector Location, FString& RLocation, con
 	LinVel.Set(LinVel.X, -LinVel.Y, LinVel.Z);
 	AngVel.Set(-AngVel.X, -AngVel.Y, -AngVel.Z);
 	
-	RLocation = RLocation.Printf(TEXT(" %f, %f, %f"), RLoc.X, RLoc.Y, RLoc.Z);
-	ROrientation = ROrientation.Printf(TEXT(" %f, %f, %f"), RRot.X, RRot.Y, RRot.Z);
-	RLinVel = RLinVel.Printf(TEXT(" %f, %f, %f"), LinVel.X, LinVel.Y, LinVel.Z);
-	RAngVel = RAngVel.Printf(TEXT(" %f, %f, %f"), AngVel.X, AngVel.Y, AngVel.Z);
+	RLocation = RLocation.Printf(TEXT(" %f %f %f"), RLoc.X, RLoc.Y, RLoc.Z);
+	ROrientation = ROrientation.Printf(TEXT(" %f %f %f"), RRot.X, RRot.Y, RRot.Z);
+	RLinVel = RLinVel.Printf(TEXT(" %f %f %f"), LinVel.X, LinVel.Y, LinVel.Z);
+	RAngVel = RAngVel.Printf(TEXT(" %f %f %f"), AngVel.X, AngVel.Y, AngVel.Z);
 
 	//ROrientation =RRot.ToCompactString();
 
