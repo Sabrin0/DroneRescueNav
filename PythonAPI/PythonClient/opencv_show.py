@@ -1,7 +1,5 @@
 # In settings.json first activate computer vision mode:
 # https://github.com/Microsoft/AirSim/blob/master/docs/image_apis.md#computer-vision-mode
-
-import setup_path
 import airsim
 
 # requires Python 3.5.3 :: Anaconda 4.4.0
@@ -31,7 +29,7 @@ if (cameraType not in cameraTypeMap):
   printUsage()
   sys.exit(0)
 
-print (cameraTypeMap[cameraType])
+print(cameraTypeMap[cameraType])
 
 client = airsim.MultirotorClient()
 
@@ -53,13 +51,14 @@ fps = 0
 
 while True:
     # because this method returns std::vector<uint8>, msgpack decides to encode it as a string unfortunately.
-    rawImage = client.simGetImage("0", cameraTypeMap[cameraType])
+    #rawImage = client.simGetImage("0", cameraTypeMap["depth"])
+    rawImage = client.simGetImage('0', airsim.ImageType.Segmentation)
     if (rawImage == None):
         print("Camera is not returning image, please check airsim for error messages")
         sys.exit(0)
     else:
         png = cv2.imdecode(airsim.string_to_uint8_array(rawImage), cv2.IMREAD_UNCHANGED)
-        cv2.putText(png,'FPS ' + str(fps),textOrg, fontFace, fontScale,(255,0,255),thickness)
+        cv2.putText(png, 'FPS ' + str(fps), textOrg, fontFace, fontScale, (255, 0, 255), thickness)
         cv2.imshow("Depth", png)
 
     frameCount = frameCount  + 1

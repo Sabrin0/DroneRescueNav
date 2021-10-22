@@ -36,14 +36,14 @@ class LidarTest:
         #print("state: %s" % pprint.pformat(state))
 
         airsim.wait_key('Press any key to move vehicle to (-10, 10, -10) at 5 m/s')
-        self.client.moveToPositionAsync(-10, 10, -10, 5).join()
+        self.client.moveToPositionAsync(10, 0, -5, 2).join()
 
         self.client.hoverAsync().join()
 
         airsim.wait_key('Press any key to get Lidar readings')
         
         for i in range(1,5):
-            lidarData = self.client.getLidarData();
+            lidarData = self.client.getLidarData()
             if (len(lidarData.point_cloud) < 3):
                 print("\tNo points received from Lidar data")
             else:
