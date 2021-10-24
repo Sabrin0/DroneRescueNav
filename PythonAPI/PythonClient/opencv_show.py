@@ -1,6 +1,7 @@
 # In settings.json first activate computer vision mode:
 # https://github.com/Microsoft/AirSim/blob/master/docs/image_apis.md#computer-vision-mode
 import airsim
+import numpy as np
 
 # requires Python 3.5.3 :: Anaconda 4.4.0
 # pip install opencv-python
@@ -51,15 +52,29 @@ fps = 0
 
 while True:
     # because this method returns std::vector<uint8>, msgpack decides to encode it as a string unfortunately.
-    #rawImage = client.simGetImage("0", cameraTypeMap["depth"])
-    rawImage = client.simGetImage('0', airsim.ImageType.Segmentation)
+    rawImage = client.simGetImage("0", cameraTypeMap["depth"])
+    #rawImage = client.simGetImage('0', airsim.ImageType.Segmentation)
     if (rawImage == None):
         print("Camera is not returning image, please check airsim for error messages")
         sys.exit(0)
     else:
         png = cv2.imdecode(airsim.string_to_uint8_array(rawImage), cv2.IMREAD_UNCHANGED)
         cv2.putText(png, 'FPS ' + str(fps), textOrg, fontFace, fontScale, (255, 0, 255), thickness)
-        cv2.imshow("Depth", png)
+        #cv2.imshow("Depth", png)
+        responses = client.simGetImages([airsim.ImageRequest("0", airsim.ImageType.DepthPlanar, False, False)])
+        response = responses[0]
+
+        # get numpy array
+        img1d = np.fromstring(response.image_data_uint8, dtype=np.uint8)
+
+        # reshape array to 4 channel image array H X W X 4
+        #img_rgb = img1d.reshape(response.height, response.width, 3)
+        img_rgb = airsim.list_to_2d_float_array(response.image_data_float, response.width, response.height)
+        # original image is fliped vertically
+
+        cv2.imshow("Depth", img_rgb)
+
+
 
     frameCount = frameCount  + 1
     endTime = time.time()
