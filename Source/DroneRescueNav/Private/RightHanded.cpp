@@ -23,9 +23,9 @@ void  URightHanded::RightHandedT(const FVector Location, FString& RLocation, con
 	ROrientation.ToString();
 	*/
 	FVector RLoc = FVector(Location.X, -Location.Y, Location.Z);
-	FVector RRot = FVector(-Orientation.Roll, -Orientation.Pitch, -Orientation.Yaw);
+	FVector RRot = FVector(-Orientation.Roll, Orientation.Pitch, -Orientation.Yaw);
 	LinVel.Set(LinVel.X, -LinVel.Y, LinVel.Z);
-	AngVel.Set(-AngVel.X, -AngVel.Y, -AngVel.Z);
+	AngVel.Set(-AngVel.X, AngVel.Y, -AngVel.Z);
 	
 	RLocation = RLocation.Printf(TEXT(" %f %f %f"), RLoc.X, RLoc.Y, RLoc.Z);
 	ROrientation = ROrientation.Printf(TEXT(" %f %f %f"), RRot.X, RRot.Y, RRot.Z);
