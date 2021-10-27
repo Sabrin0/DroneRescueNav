@@ -1,4 +1,8 @@
 DroneRescueNav
+# Build AirSim
+In order to build AirSim on Windows and to use Python API, please check the following guides:
+- [Build AirSim on Windows](https://microsoft.github.io/AirSim/build_windows/#build-airsim).
+- [AirSim APIs](https://microsoft.github.io/AirSim/apis/)
 
 # Build and Install
 - Make sure AirSim is build and Unreal 4.26 is installed
@@ -10,20 +14,41 @@ DroneRescueNav
 
 # AirSim Settings
 
-Please edit the `setting.json` file as follow (Inside the dir `..Documents\AirSim`):
+Please edit the `setting.json` file as follow (Inside the dir `Documents\AirSim`):
+
+Check [AirSim Settins](https://github.com/Microsoft/AirSim/blob/master/docs/settings.md) for more details.
+
 ```
 {
   "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/master/docs/settings.md",
   "SettingsVersion": 1.2,
   "SimMode": "Multirotor",
 
+  "_comment": "-------------- SENSORS --------------",
+  "CameraDefaults": {
+    "CaptureSettings": [
+      {
+        "ImageType": 0,
+        "Width": 256,
+        "Height": 144,
+        "FOV_Degrees": 90,
+        "AutoExposureSpeed": 100,
+        "AutoExposureBias": 0,
+        "AutoExposureMaxBrightness": 0.64,
+        "AutoExposureMinBrightness": 0.03,
+        "MotionBlurAmount": 0,
+        "TargetGamma": 1.0,
+        "ProjectionMode": "",
+        "OrthoWidth": 5.12
+      }
+    ]
+  },
   "DefaultSensors": {
 
-    "Distance": {
+    "DistanceFront": {
       "SensorType": 5,
       "Enabled": true,
-      "MinDistance": 0.2,
-      "MaxDistance": 40,
+      "MaxDistance": 10,
       "X": 0,
       "Y": 0,
       "Z": -1,
@@ -31,9 +56,55 @@ Please edit the `setting.json` file as follow (Inside the dir `..Documents\AirSi
       "Pitch": 0,
       "Roll": 0,
       "DrawDebugPoints": true
+    },
+
+    "DistanceRight": {
+      "SensorType": 5,
+      "Enabled": true,
+      "MaxDistance": 10,
+      "X": 0,
+      "Y": 0,
+      "Z": -1,
+      "Yaw": -90,
+      "Pitch": 0,
+      "Roll": 0,
+      "DrawDebugPoints": true
+    },
+
+    "DistanceLeft": {
+      "SensorType": 5,
+      "Enabled": true,
+      "MaxDistance": 10,
+      "X": 0,
+      "Y": 0,
+      "Z": -1,
+      "Yaw": 90,
+      "Pitch": 0,
+      "Roll": 0,
+      "DrawDebugPoints": true
+    },
+
+    "LidarSensor": {
+      "SensorType": 6,
+      "Enabled": false,
+      "NumberOfChannels": 16,
+      "RotationsPerSecond": 10,
+      "PointsPerSecond": 100000,
+      "X": 0,
+      "Y": 0,
+      "Z": -1,
+      "Roll": 0,
+      "Pitch": 0,
+      "Yaw": 0,
+      "VerticalFOVUpper": -15,
+      "VerticalFOVLower": -25,
+      "HorizontalFOVStart": -30,
+      "HorizontalFOVEnd": 30,
+      "DrawDebugPoints": true,
+      "DataFrame": "SensorLocalFrame"
     }
   }
-}
+  }
 ```
 
 # Trobleshooting 
