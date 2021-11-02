@@ -76,3 +76,5 @@ DerivedDataCache/*
 Plugins/AirSim/Source/Vehicles/Multirotor/GetLocation.cpp
 
 Plugins/AirSim/Source/Vehicles/Multirotor/GetLocation.h
+PythonAPI/numpy-1.21.3+vanilla-cp310-cp310-win_amd64.whl
+PythonAPI/scipy-1.7.1-cp310-cp310-win_amd64.whl
