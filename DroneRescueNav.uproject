@@ -17,6 +17,10 @@
 		{
 			"Name": "AirSim",
 			"Enabled": true
+		},
+		{
+			"Name": "PythonScriptPlugin",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
