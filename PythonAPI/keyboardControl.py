@@ -118,7 +118,5 @@ class DroneController:
 
 
 if __name__ == "__main__":
-    # TODO
-    # - integrate other Device 
     controller = DroneController()
     controller.fly_by_keyboard()

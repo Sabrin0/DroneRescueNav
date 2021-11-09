@@ -15,6 +15,7 @@ class joystickHandler:
         self.max_vel = 100
         self.my_controller = pygame.joystick.Joystick(1)
         self.my_throttle = pygame.joystick.Joystick(0)
+        self.my_base = pygame.joystick.Joystick(2)
         pygame.joystick.init()
         # joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
 
@@ -39,6 +40,7 @@ class joystickHandler:
 
     def play(self):
         while True:
+
             self.screen.fill((0, 0, 0))
             pygame.draw.rect(self.screen, self.colors[self.pointer_color], self.pointer)
             # for idx, val in enumerate(motion):
@@ -49,11 +51,11 @@ class joystickHandler:
 
             # horizontal_axis = my_controller.get_axis(1)
             # vertical_axis = my_controller.get_axis(0)
-            self.t_axis = self.my_throttle.get_axis(2)
+            self.t_axis = self.my_throttle.get_axis(1)
             # print(my_throttle.get_numaxes())
             self.hat = self.my_controller.get_hat(0)
             self.restart = self.my_controller.get_button(0)
-
+            self.base_control = self.my_base.get_axis(0)
             # pointer.x = hat[0]*10
             # pointer.y = hat[1]*10
             self.pointer.y = self.motion[1]
@@ -69,8 +71,14 @@ class joystickHandler:
             #time.sleep(1)
             #print(self.t_axis)
 
+
             for event in pygame.event.get():
-                # print(event)
+                #print(event)
+                if event.type == JOYAXISMOTION:
+                    print(event)
+                if event.type == JOYHATMOTION:
+                    print(event)
+
                 if event.type == JOYBUTTONDOWN:  # and event.button == 0:
                     print(event)
                     print(event.button)
@@ -112,7 +120,7 @@ class joystickHandler:
                 output = self.feature_scaling(self.t_axis)
             else:
                 output = 0.0
-            print(self.restart)
+            #print(self.restart)
             #print('current value: ', output)
             pygame.display.update()
             self.clock.tick(60)

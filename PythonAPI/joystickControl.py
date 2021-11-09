@@ -21,13 +21,14 @@ class UAVController:
 
         # PyGame Initialization
         pygame.init()
+        self.my_base = pygame.joystick.Joystick(0)
         self.my_controller = pygame.joystick.Joystick(1)
-        self.my_throttle = pygame.joystick.Joystick(0)
+        self.my_throttle = pygame.joystick.Joystick(2)
         pygame.joystick.init()
         # self.joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
         self.input_mapping = {
             'nose': 'altitude_motion',  # button t_axis -> old key
-            'WD' : 'yaw_motion',
+            'base': 'yaw_motion',
             'horizontal_axis': 'horizontal_motion',
             'vertical_axis': 'vertical_motion',
             't_axis': 'velocity_control',
@@ -47,18 +48,19 @@ class UAVController:
 
     def input_manager(self):
         while True:
-            self.horizontal_axis = self.my_controller.get_axis(0)
-            self.vertical_axis = self.my_controller.get_axis(1)
-            self.t_axis = self.my_throttle.get_axis(2)
-            self.arrows = self.my_controller.get_hat(0)
-            self.restart = self.my_controller.get_button(0)
+            self.horizontal_axis = self.my_controller.get_axis(0)  # joystick vertical axis
+            self.vertical_axis = self.my_controller.get_axis(1)  # joystick horizontal axis
+            self.t_axis = self.my_throttle.get_axis(2)  # throttle axis
+            self.base = self.my_base.get_axis(2)  # base platform
+            self.nose = self.my_controller.get_hat(0)  # NOSE joystick
+            self.restart = self.my_controller.get_button(0)  # restart button
             pygame.event.pump()
-            #for event in pygame.event.get():
-                # if event.type == JOYBUTTONDOWN and event.button == 0:
-                # print('pressed')
-                #    self.active_command[self.input_mapping[event.button]] = True
-                # if event.type == JOYBUTTONUP and event.button == 0:
-                #    self.active_command[self.input_mapping[event.button]] = False
+            # for event in pygame.event.get():
+            # if event.type == JOYBUTTONDOWN and event.button == 0:
+            # print('pressed')
+            #    self.active_command[self.input_mapping[event.button]] = True
+            # if event.type == JOYBUTTONUP and event.button == 0:
+            #    self.active_command[self.input_mapping[event.button]] = False
             # --------------------- RESTART ---------------------
             if self.restart == 1:
                 self.active_command[self.input_mapping['red']] = True
@@ -80,7 +82,7 @@ class UAVController:
             else:
                 self.active_command[self.input_mapping['t_axis']] = False
             '''
-            if self.arrows[1] != 0:
+            if self.nose[1] != 0:
                 self.active_command[self.input_mapping['nose']] = True
             else:
                 self.active_command[self.input_mapping['nose']] = False
@@ -98,21 +100,19 @@ class UAVController:
                 self.active_command[self.input_mapping['vertical_axis']] = False
 
             # ----------------------- YAW CONTROL -----------------------
-            if self.arrows[0] != 0:
-                self.active_command[self.input_mapping['WD']] = True
+            if abs(self.base) > 0.05:
+                self.active_command[self.input_mapping['base']] = True
             else:
-                self.active_command[self.input_mapping['WD']] = False
+                self.active_command[self.input_mapping['base']] = False
 
             self.move_by_joystick()
-            time.sleep(self.duration / 2.5) #2.00
+            time.sleep(self.duration / 2.5)  # 2.00
 
     def input_scaling(self, input):
         current_vel = (input - 1) * self.max_speed / (-2)
         return current_vel
 
     def move_by_joystick(self):
-
-
 
         self.desired_velocity = np.zeros(3, dtype=np.float32)
         '''
@@ -131,22 +131,22 @@ class UAVController:
             current_vel = 0.0
 
         if self.active_command['altitude_motion']:
-            self.desired_velocity[2] += current_vel * self.arrows[1] #self.acceleration * self.arrows[1] self.max_speed * self.t_axis
+            self.desired_velocity[2] += current_vel * self.nose[1]  # self.acceleration * self.nose[1] self.max_speed * self.t_axis
         else:
             self.desired_velocity[2] = 0.0
 
         if self.active_command['horizontal_motion']:
-            self.desired_velocity[1] += current_vel * self.horizontal_axis #self.max_speed * self.horizontal_axis
+            self.desired_velocity[1] += current_vel * self.horizontal_axis  # self.max_speed * self.horizontal_axis
         else:
             self.desired_velocity[1] = 0.0
 
         if self.active_command['vertical_motion']:
-            self.desired_velocity[0] += current_vel * self.vertical_axis #self.max_speed * self.vertical_axis
+            self.desired_velocity[0] += current_vel * self.vertical_axis  # self.max_speed * self.vertical_axis
         else:
             self.desired_velocity[0] = 0.0
 
         if self.active_command['yaw_motion']:
-            yaw_rate = self.angular_velocity * self.arrows[0]
+            yaw_rate = self.angular_velocity * -self.base
         else:
             yaw_rate = 0.0
 
@@ -157,7 +157,7 @@ class UAVController:
         self.move(self.desired_velocity, yaw_rate)
 
     def move(self, velocity, yaw_rate):
-        #print(velocity)
+        # print(velocity)
         # self.client.moveByVelocityAsync(velocity[0].item(), velocity[1].item(), -velocity[2].item(), self.duration)
         self.client.moveByVelocityBodyFrameAsync(-velocity[0].item(), velocity[1].item(), -velocity[2].item(),
                                                  self.duration,
