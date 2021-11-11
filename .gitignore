@@ -76,3 +76,5 @@ DerivedDataCache/*
 Plugins/AirSim/Source/Vehicles/Multirotor/GetLocation.cpp
 
 Plugins/AirSim/Source/Vehicles/Multirotor/GetLocation.h
+
+PythonAPI/provevarie.py

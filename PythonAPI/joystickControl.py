@@ -4,6 +4,7 @@ import time
 import pygame
 
 import numpy as np
+from sensors import SensorManager
 
 # from scipy.spatial.transform import Rotation as ScipyRotation
 from pygame.locals import *
@@ -14,7 +15,7 @@ class UAVController:
         self.acceleration = 3.0
         self.max_speed = 20.0
 
-        self.angular_velocity = 90.0
+        self.angular_velocity = 180.0
         self.duration = 0.4
         self.friction = 0.5
         self.desired_velocity = np.zeros(3, dtype=np.float32)
@@ -36,7 +37,10 @@ class UAVController:
 
         }
 
-        # initialize input as false
+        #  Flag for obstacle avoidance
+        self.obstacle = False
+
+        #  initialize input as false
         self.active_command = {command: False for command in self.input_mapping.values()}
         # AirSim Client Connection
 
@@ -47,7 +51,11 @@ class UAVController:
         self.starting_pose = self.client.simGetVehiclePose()
 
     def input_manager(self):
-        while True:
+        #while True:
+        # Check for Obstacle
+        self.obstacle = distance.get_data()
+        #while not self.obstacle:
+        if not self.obstacle:
             self.horizontal_axis = self.my_controller.get_axis(0)  # joystick vertical axis
             self.vertical_axis = self.my_controller.get_axis(1)  # joystick horizontal axis
             self.t_axis = self.my_throttle.get_axis(2)  # throttle axis
@@ -166,8 +174,10 @@ class UAVController:
 
 
 if __name__ == '__main__':
+    distance = SensorManager()
     drone = UAVController()
-    drone.input_manager()
+    while True:
+        drone.input_manager()
 
 '''
 while True:
