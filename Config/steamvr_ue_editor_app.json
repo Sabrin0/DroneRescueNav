@@ -2,7 +2,7 @@
 	"source": "UE",
 	"applications": [
 		{
-			"app_key": "application.generated.ue.dronerescuenav-15973114.ue4editor.exe",
+			"app_key": "application.generated.ue.dronenav-15973114.ue4editor.exe",
 			"launch_type": "url",
 			"url": "steam://launch/",
 			"action_manifest_path": "C:/Users/Luca Covizzi/OneDrive/Desktop/Thesis/DroneRescueNav/Config/SteamVRBindings/steamvr_manifest.json",
@@ -10,7 +10,7 @@
 			{
 				"en_us":
 				{
-					"name": "DroneRescueNav-15973114 [UE Editor]"
+					"name": "DroneNav-15973114 [UE Editor]"
 				}
 			}
 		}
