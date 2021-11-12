@@ -53,7 +53,7 @@ class UAVController:
     def input_manager(self):
         #while True:
         # Check for Obstacle
-        self.obstacle = distance.get_data()
+        #self.obstacle = distance.get_data()
         #while not self.obstacle:
         if not self.obstacle:
             self.horizontal_axis = self.my_controller.get_axis(0)  # joystick vertical axis
