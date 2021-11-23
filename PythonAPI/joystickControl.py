@@ -15,7 +15,7 @@ class UAVController:
         self.acceleration = 3.0
         self.max_speed = 20.0
 
-        self.angular_velocity = 180.0
+        self.angular_velocity = 90.0
         self.duration = 0.4
         self.friction = 0.5
         self.desired_velocity = np.zeros(3, dtype=np.float32)
@@ -53,7 +53,7 @@ class UAVController:
     def input_manager(self):
         #while True:
         # Check for Obstacle
-        self.obstacle = distance.get_data()
+        #self.obstacle = distance.get_data()
         #while not self.obstacle:
         if not self.obstacle:
             self.horizontal_axis = self.my_controller.get_axis(0)  # joystick vertical axis
@@ -63,7 +63,7 @@ class UAVController:
             self.nose = self.my_controller.get_hat(0)  # NOSE joystick
             self.restart = self.my_controller.get_button(0)  # restart button
             pygame.event.pump()
-            # for event in pygame.event.get():
+            # for fevent in pygame.event.get():
             # if event.type == JOYBUTTONDOWN and event.button == 0:
             # print('pressed')
             #    self.active_command[self.input_mapping[event.button]] = True
