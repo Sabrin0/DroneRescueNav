@@ -53,7 +53,7 @@ class joystickHandler:
             # vertical_axis = my_controller.get_axis(0)
             self.t_axis = self.my_throttle.get_axis(1)
             # print(my_throttle.get_numaxes())
-            self.hat = self.my_controller.get_hat(0)
+            #self.hat = self.my_controller.get_hat(0)
             self.restart = self.my_controller.get_button(0)
             self.base_control = self.my_base.get_axis(0)
             # pointer.x = hat[0]*10
@@ -102,11 +102,12 @@ class joystickHandler:
                     print('hat: ', event.hat)
                     print('value: ', event.value)
                 '''
-
+                '''
                 if self.hat[1] != 0:
                     self.active[self.mapping['hat']] = True
                 else:
                     self.active[self.mapping['hat']] = False
+                '''
 
                 if event.type == QUIT:
                     pygame.quit()

@@ -27,6 +27,7 @@ class UAVController:
         self.my_controller = pygame.joystick.Joystick(1)
         self.my_throttle = pygame.joystick.Joystick(2)
         pygame.joystick.init()
+        self.smooth = 0.7
         # self.joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
         self.input_mapping = {
             'nose': 'altitude_motion',  # button t_axis -> old key
@@ -104,7 +105,7 @@ class UAVController:
             time.sleep(self.duration / 2.5)  # 2.00
         else:
             force.generate_amplitude(distance)
-            velocity = force.switch_region(region)
+            velocity = force.switch_region(region)*self.smooth
             self.client.simPrintLogMessage('Obstacle Detected in : ', region, severity=1)
             self.client.moveByVelocityZBodyFrameAsync(velocity[0].item(), velocity[1].item(),
                                                        self.client.simGetVehiclePose().position.z_val,

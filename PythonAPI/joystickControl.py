@@ -22,9 +22,9 @@ class UAVController:
 
         # PyGame Initialization
         pygame.init()
-        self.my_base = pygame.joystick.Joystick(0)
-        self.my_controller = pygame.joystick.Joystick(1)
-        self.my_throttle = pygame.joystick.Joystick(2)
+        self.my_base = pygame.joystick.Joystick(1)
+        self.my_controller = pygame.joystick.Joystick(2)
+        self.my_throttle = pygame.joystick.Joystick(0)
         pygame.joystick.init()
         # self.joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
         self.input_mapping = {

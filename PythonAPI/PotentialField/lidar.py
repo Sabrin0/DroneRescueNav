@@ -9,7 +9,7 @@ class Lidar:
         self.client = airsim.MultirotorClient()
         self.client.confirmConnection()
         self.client.enableApiControl(True)
-        #self.client.takeoffAsync().join()
+        # self.client.takeoffAsync().join()
         self.regions = ['E', 'NE', 'N', 'NO', 'O']
         self.regions_number = len(self.regions)
         self.j = [0, 1]
@@ -44,7 +44,7 @@ class Lidar:
     @staticmethod
     def unit_vector(vector):
         # calculate the distance unit vector
-        return vector/np.linalg.norm(vector)
+        return vector / np.linalg.norm(vector)
 
     @staticmethod
     def get_theta(v, u):
@@ -60,10 +60,9 @@ class Lidar:
         return None
 
     def check_idx(self, idx):
-        if idx < 0 : return 0
-        if idx > (self.regions_number - 1): return (self.regions_number- 1)
+        if idx < 0: return 0
+        if idx > (self.regions_number - 1): return (self.regions_number - 1)
         return idx
-
 
     def check_obstacle(self, distance):
         if np.min(distance) < self.threshold:
@@ -91,10 +90,39 @@ class Lidar:
     def find_closer(self, region, distance):
         min_dist_id = np.argmin(distance)
         return distance[min_dist_id], region[min_dist_id]
-"""
-if __name__ == '__main__':
-    sensor = Lidar()
-    while True:
+
+
+class DebugLidarData(Lidar):
+
+    def save_closer(self):
+        data = super().get_data()
+
+        try:
+            matrix = super().reshape_point_cloud(data)
+        except:
+            print('No lidar value')
+            pass
+
+        distance = np.array([np.apply_along_axis(super().euclidean_distance, axis=1, arr=matrix)])
+        matrix_d = np.append(matrix, distance.T, axis=1)
+        closest_points = self.extract_row(matrix_d)
+
+        if closest_points[3] < 5:
+            #print('Distance:', closest_points[3])
+            #print('points: ', distance[0:2])
+            return closest_points[0:3]
+        else:
+            pass
+
+    @staticmethod
+    def extract_row(matrix):
+        # extract closest point
+        closest_point_idx = np.argmin(matrix[:, 3])
+        return matrix[closest_point_idx]
+
+
+
+"""    while True:
         #m, dt, s = sensor.checkData()
         data = sensor.get_data()
         matrix = sensor.reshape_point_cloud(data)
@@ -103,10 +131,10 @@ if __name__ == '__main__':
         result = np.apply_along_axis(sensor.get_obstacle, axis=1, arr=matrix_d)
 
 """
-        # print('points: ', len(m), '\n dt: ', dt, '\n s: ', len(s))
-        # print(np.min(m))
-        # if np.max(m) < 4:
-        #    print("---STOP---")
-        #    sensor.client.hoverAsync()
-        # if measurements.x_val > 3:
-        # sensor.client.hoverAsync()
+# print('points: ', len(m), '\n dt: ', dt, '\n s: ', len(s))
+# print(np.min(m))
+# if np.max(m) < 4:
+#    print("---STOP---")
+#    sensor.client.hoverAsync()
+# if measurements.x_val > 3:
+# sensor.client.hoverAsync()
