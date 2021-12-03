@@ -12,8 +12,8 @@ class Lidar:
         self.client.moveToZAsync(-3., 1., timeout_sec=1.).join()
         self.j = [0, 1]
         self.obstacle = False
-        self.threshold = 1.5
-        self.range = 10.0
+        self.threshold = 1
+        self.range = 7
 
     def get_data(self):
         sensor_data = self.client.getLidarData()
@@ -60,23 +60,22 @@ class Lidar:
             matrix = self.reshape_point_cloud(data)
             distance = np.array([np.apply_along_axis(self.euclidean_distance, axis=1, arr=matrix)])
         except:
+
             print('No Lidar values')
             return False, None, self.range
-
-
 
         matrix_d = np.append(matrix, distance.T, axis=1)
         closest_obstacle = self.find_closer(matrix_d)
 
         if closest_obstacle[3] < self.threshold:
-            return True, closest_obstacle[0:3], closest_obstacle[3] #[0:3]
+            return True, closest_obstacle[0:3], closest_obstacle[3]  # [0:3]
 
         else:
             return False, None, closest_obstacle[3]
 
     @staticmethod
     def find_closer(matrix):
-        min_dist_id = np.argmin(matrix[:,3])
+        min_dist_id = np.argmin(matrix[:, 3])
         return matrix[min_dist_id]
 
 
@@ -96,8 +95,8 @@ class DebugLidarData(Lidar):
         closest_points = self.extract_row(matrix_d)
 
         if closest_points[3] < 5:
-            #print('Distance:', closest_points[3])
-            #print('points: ', distance[0:2])
+            # print('Distance:', closest_points[3])
+            # print('points: ', distance[0:2])
             return closest_points[0:3]
         else:
             pass
@@ -107,7 +106,6 @@ class DebugLidarData(Lidar):
         # extract closest point
         closest_point_idx = np.argmin(matrix[:, 3])
         return matrix[closest_point_idx]
-
 
 
 """    while True:

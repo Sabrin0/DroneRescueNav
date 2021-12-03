@@ -19,7 +19,7 @@ class Sigmoid:
         self.y = np.empty(0)
         self.d_min = 0.5
         self.d_max = 3.0
-        self.F_max = 5
+        self.F_max = 10
         self.F_min = 0.0
         #self.y = 1/(1  + (math.exp(self.x+10)))
 
@@ -47,8 +47,8 @@ if __name__ == '__main__':
     plt.plot(d, test.y)
     plt.xlabel('Distance')
     plt.ylabel('Force')
-    plt.vlines(test.d_min, 0, 5, colors='r', linestyles='--', label='d_min')
-    plt.vlines(test.d_max, 0, 5, colors='r', linestyles='--', label='d_max')
+    plt.vlines(test.d_min, 0, test.F_max, colors='r', linestyles='--', label='d_min')
+    plt.vlines(test.d_max, 0, test.F_max, colors='r', linestyles='--', label='d_max')
     plt.show()
 
     """

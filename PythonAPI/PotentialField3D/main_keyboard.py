@@ -19,9 +19,10 @@ class DroneController:
         self.min_speed = 1.0
         self.angular_velocity = 90.0
         self.duration = 0.4
-        self.friction = 0.5
-        self.max_distance = 10.0
+        self.friction = 0.2
+        self.max_distance = 7
         self.min_distance = 1.0
+        self.current_distance = 0.0
 
         self.allowed_velocity = self.max_speed
 
@@ -66,6 +67,7 @@ class DroneController:
         """
         Begin to listen for keyboard input and send according control commands until `esc` is pressed.
         """
+
         print("Starting manual control mode...")
         # Start a listener instance that invokes callbacks when keys are pressed or released. When the listener stops,
         # it indicates that the whole execution should stop too.
@@ -73,7 +75,7 @@ class DroneController:
             keyboard_listener.wait()
 
             while keyboard_listener.running:
-                obstacle, points, d = sensor.manage_data()
+                obstacle, points, self.current_distance = sensor.manage_data()
 
                 if not obstacle:
                     """
@@ -92,7 +94,7 @@ class DroneController:
                     time.sleep(self.duration / 2.0)
                 else:
 
-                    FF.get_force(d)
+                    FF.get_force(self.current_distance)
                     vel = FF.get_vel(points[0:3])
                     self._client.moveByVelocityBodyFrameAsync(
                             -vel[0].item(), -vel[1].item(), -vel[2].item(),
@@ -104,6 +106,7 @@ class DroneController:
         print("Manual control mode was successfully deactivated.")
 
     def move(self, velocity, yaw_rate):
+        FF.save_velocities(np.transpose(velocity))
         self._client.moveByVelocityAsync(velocity[0].item(), velocity[1].item(), velocity[2].item(),
                                          self.duration,
                                          drivetrain=airsim.DrivetrainType.ForwardOnly,
@@ -162,12 +165,14 @@ class DroneController:
 
 
         yaw_rate = 0.0
+
         if self._active_commands["turn left"]:
             yaw_rate = -self.angular_velocity
         elif self._active_commands["turn right"]:
             yaw_rate = self.angular_velocity
 
-        self.move(self.desired_velocity, yaw_rate)
+        self.move(self.desired_velocity*(self.current_distance/self.max_distance),
+                  yaw_rate)
 
 
 if __name__ == "__main__":
