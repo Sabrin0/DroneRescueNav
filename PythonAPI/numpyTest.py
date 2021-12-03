@@ -15,14 +15,42 @@ class Test:
 
 class Sigmoid:
     def __init__(self):
-        self.x = np.linspace(-10, 10, 100)
-        self.y = 1/(1  + (math.exp(self.x+10)))
+        self.x = np.linspace(0, 10, 1000)
+        self.y = np.empty(0)
+        self.d_min = 0.5
+        self.d_max = 3.0
+        self.F_max = 5
+        self.F_min = 0.0
+        #self.y = 1/(1  + (math.exp(self.x+10)))
 
     def plot(self):
         plt.plot(self.x, self.y)
         plt.show()
 
-if __name__ == "__main__":
+    def sig_plot(self, d):
+
+        if d >= self.d_max:
+            self.y = 0
+        elif d <= self.d_min:
+            self.y = self.F_max
+        else:
+            cosarg = ((d - self.d_min) * np.pi) / (self.d_max - self.d_min)
+            self.y = (self.F_max - self.F_min) * (0.5 * np.cos(cosarg) + 0.5) + self.F_min
+        return self.y
+
+if __name__ == '__main__':
+    d = np.linspace(0, 10, 100)
+    test = Sigmoid()
+    #test.y = np.apply_along_axis(test.sig_plot, axis=0, arr=d)
+    for i in range(0, len(d)):
+        test.y = np.append(test.y, test.sig_plot(d[i]))
+    plt.plot(d, test.y)
+    plt.xlabel('Distance')
+    plt.ylabel('Force')
+    plt.vlines(test.d_min, 0, 5, colors='r', linestyles='--', label='d_min')
+    plt.vlines(test.d_max, 0, 5, colors='r', linestyles='--', label='d_max')
+    plt.show()
+
     """
     fig = plt.figure()
     ax = fig.gca(projection='3d')
@@ -39,5 +67,6 @@ if __name__ == "__main__":
 
     plt.show()
     """
-    test = Sigmoid()
-    test.plot()
+
+
+    #test.plot()

@@ -23,4 +23,4 @@ class GenerateForce:
             self.force = self.max_force
         else:
             cosarg = (d - self.min_distance) * np.pi / (self.max_distance - self.min_distance)
-            self.force = (self.max_force - self.min_force) * (0.5 * np.cos(cosarg) + 0.5) + self.min_distance
+            self.force = (self.max_force - self.min_force) * (0.5 * np.cos(cosarg) + 0.5) + self.min_force

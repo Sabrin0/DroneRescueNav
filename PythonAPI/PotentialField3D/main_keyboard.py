@@ -104,7 +104,8 @@ class DroneController:
         print("Manual control mode was successfully deactivated.")
 
     def move(self, velocity, yaw_rate):
-        self._client.moveByVelocityAsync(velocity[0].item(), velocity[1].item(), velocity[2].item(), self.duration,
+        self._client.moveByVelocityAsync(velocity[0].item(), velocity[1].item(), velocity[2].item(),
+                                         self.duration,
                                          drivetrain=airsim.DrivetrainType.ForwardOnly,
                                          yaw_mode=airsim.YawMode(True, yaw_rate))
 

@@ -58,12 +58,12 @@ class Lidar:
         # avoid crash if the lidar laser does not hit anything
         try:
             matrix = self.reshape_point_cloud(data)
-
+            distance = np.array([np.apply_along_axis(self.euclidean_distance, axis=1, arr=matrix)])
         except:
             print('No Lidar values')
             return False, None, self.range
 
-        distance = np.array([np.apply_along_axis(self.euclidean_distance, axis=1, arr=matrix)])
+
 
         matrix_d = np.append(matrix, distance.T, axis=1)
         closest_obstacle = self.find_closer(matrix_d)
