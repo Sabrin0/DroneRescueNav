@@ -1,5 +1,6 @@
 from PotentialField.lidar import DebugLidarData
-
+from PotentialField3D.lidar3D import Lidar
+from PotentialField3D.force_field3D import GenerateForce
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.proj3d import proj_transform
@@ -62,13 +63,19 @@ def plot_force(dx, dy, dz, ax):
         mutation_scale=20,
         arrowstyle="<|-",
         linestyle='dashed')
+    # Make the direction data for the arrows
+    u = [1, 0, 0]
+    v = [0, 1, 0]
+    w = [0, 0, 1]
 
+    ax.quiver(0, 0, 0, u, v, w, length=0.3, normalize=True, color='r')
     ax.set_title('Force Vector')
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
     plt.xlim(-1,1)
     plt.ylim(-1,1)
+    ax.set_zlim(-1,1)
     plt.show(block=False)
     plt.pause(0.01667)
     plt.cla()
@@ -76,11 +83,26 @@ def plot_force(dx, dy, dz, ax):
 
 
 if __name__ == '__main__':
-    sensor = DebugLidarData()
+    #sensor = DebugLidarData()
+    sensor = Lidar()
+    FF = GenerateForce()
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
     while True:
-        points = sensor.save_closer()
-        plot_force(points[0], -points[1], -points[2], ax)
+        obstacle, points = sensor.manage_data()
+        if obstacle:
+            FF.get_amplitude(points[3])
+            vel = FF.get_vel(points[0:3])
+            plot_force(points[0], points[1], -points[2], ax)
 
+        else:
+            plot_force(0, 0, 0, ax)
+        """
+        points = sensor.save_closer()
+
+        if points is None:
+            plot_force(0, 0, 0, ax)
+        else:
+            plot_force(points[0], -points[1], -points[2], ax)
+        """

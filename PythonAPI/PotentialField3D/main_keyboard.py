@@ -1,4 +1,8 @@
 import airsim
+from keyboardControl import DroneController
+from PotentialField3D.lidar3D import Lidar
+from PotentialField3D.force_field3D import GenerateForce
+import airsim
 from pynput import keyboard
 import numpy as np
 from scipy.spatial.transform import Rotation as ScipyRotation
@@ -12,9 +16,14 @@ class DroneController:
     def __init__(self):
         self.acceleration = 3.0
         self.max_speed = 6.0
+        self.min_speed = 1.0
         self.angular_velocity = 90.0
         self.duration = 0.4
         self.friction = 0.5
+        self.max_distance = 10.0
+        self.min_distance = 1.0
+
+        self.allowed_velocity = self.max_speed
 
         self.desired_velocity = np.zeros(3, dtype=np.float32)
 
@@ -34,7 +43,8 @@ class DroneController:
         self._client = airsim.MultirotorClient()
         self._client.confirmConnection()
         self._client.enableApiControl(True)
-        self._client.takeoffAsync()
+        self._client.moveToZAsync(-4., 2., timeout_sec=2.).join()
+        #self._client.takeoffAsync()
 
     def fly_by_keyboard(self):
         """
@@ -62,11 +72,34 @@ class DroneController:
         with keyboard.Listener(on_press=self._on_press, on_release=self._on_release) as keyboard_listener:
             keyboard_listener.wait()
 
-            if keyboard_listener.running:
-                self._handle_commands()
-                time.sleep(self.duration / 2.0)
-            else:
-                keyboard_listener.join()
+            while keyboard_listener.running:
+                obstacle, points, d = sensor.manage_data()
+
+                if not obstacle:
+                    """
+                    if d <= self.max_distance:
+                        self.allowed_velocity = ((d - self.min_distance) / (self.max_distance - self.min_distance) * (
+                                    self.max_speed - self.min_speed)) + self.min_speed
+                    elif d > self.max_distance:
+                        self.allowed_velocity = self.max_speed
+                    """
+
+                    self._handle_commands()
+
+                    #current_vel = np.array(self._client.getMultirotorState().kinematics_estimated.linear_velocity)
+                    #self._client.simPrintLogMessage('velocity: ', np.array2string(current_vel), severity=2)
+                    #print(np.array2string(current_vel))
+                    time.sleep(self.duration / 2.0)
+                else:
+
+                    FF.get_force(d)
+                    vel = FF.get_vel(points[0:3])
+                    self._client.moveByVelocityBodyFrameAsync(
+                            -vel[0].item(), -vel[1].item(), -vel[2].item(),
+                            self.duration
+                            )
+                    #time.sleep(self.duration / 2.0)
+            keyboard_listener.join()
 
         print("Manual control mode was successfully deactivated.")
 
@@ -123,18 +156,27 @@ class DroneController:
             self.desired_velocity -= self.friction * left_component
 
         speed = np.linalg.norm(self.desired_velocity)
-        if speed > self.max_speed:
+        if speed > self.allowed_velocity:
             self.desired_velocity = self.desired_velocity / speed * self.max_speed
+
 
         yaw_rate = 0.0
         if self._active_commands["turn left"]:
             yaw_rate = -self.angular_velocity
         elif self._active_commands["turn right"]:
             yaw_rate = self.angular_velocity
-        print('move')
+
         self.move(self.desired_velocity, yaw_rate)
 
 
 if __name__ == "__main__":
     controller = DroneController()
-    controller.fly_by_keyboard()
+    sensor = Lidar()
+    FF = GenerateForce()
+    controller.fly_by_keyboard_ff()
+
+
+
+
+
+
