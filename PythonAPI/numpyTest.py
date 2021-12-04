@@ -17,9 +17,9 @@ class Sigmoid:
     def __init__(self):
         self.x = np.linspace(0, 10, 1000)
         self.y = np.empty(0)
-        self.d_min = 0.5
-        self.d_max = 3.0
-        self.F_max = 10
+        self.d_min = 0.2
+        self.d_max = 1
+        self.F_max = 5
         self.F_min = 0.0
         #self.y = 1/(1  + (math.exp(self.x+10)))
 
