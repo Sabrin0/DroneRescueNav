@@ -8,8 +8,8 @@ class GenerateForce:
         self.amplitude = 0.0
         self.max_force = 5.0
         self.min_force = 0.0
-        self.min_distance = .5
-        self.max_distance = 3.0
+        self.min_distance = 0.2
+        self.max_distance = 2.0
 
     def get_force(self, distance):
         self.force = self.gain * np.power(np.e, (-distance / self.k))

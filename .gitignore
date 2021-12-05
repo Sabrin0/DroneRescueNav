@@ -80,3 +80,5 @@ Plugins/AirSim/Source/Vehicles/Multirotor/GetLocation.h
 PythonAPI/provevarie.py
 
 PythonAPI/numpyTest.py
+
+PythonAPI/PotentialField3D/velocities.txt
