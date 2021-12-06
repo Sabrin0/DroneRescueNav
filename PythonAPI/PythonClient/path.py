@@ -44,7 +44,7 @@ result = client.moveOnPathAsync([airsim.Vector3r(125,0,z),
                                 airsim.Vector3r(0,-130,z),
                                 airsim.Vector3r(0,0,z)],
                         12, 120,
-                        airsim.DrivetrainType.ForwardOnly, airsim.YawMode(False,0), 20, 1).join()
+                        airsim.DrivetrainType.ForwardOnly, airsim.YawMode(False, 0), 20, 1).join()
 
 # drone will over-shoot so we bring it back to the start point before landing.
 client.moveToPositionAsync(0,0,z,1).join()

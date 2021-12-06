@@ -9,7 +9,7 @@ class Lidar:
         self.client = airsim.MultirotorClient()
         self.client.confirmConnection()
         self.client.enableApiControl(True)
-        self.client.moveToZAsync(-3., 1., timeout_sec=1.).join()
+        #self.client.moveToZAsync(-3., 1., timeout_sec=1.).join()
         self.j = [0, 1]
         self.obstacle = False
         self.threshold = 1
