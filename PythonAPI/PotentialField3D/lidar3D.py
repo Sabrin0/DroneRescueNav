@@ -3,6 +3,8 @@ import sys
 import math
 import numpy as np
 
+from scipy.spatial import distance
+
 
 class Lidar:
     def __init__(self):
@@ -12,7 +14,7 @@ class Lidar:
         #self.client.moveToZAsync(-3., 1., timeout_sec=1.).join()
         self.j = [0, 1]
         self.obstacle = False
-        self.threshold = 1
+        self.threshold = 2
         self.range = 7
 
     def get_data(self):
@@ -32,7 +34,9 @@ class Lidar:
     def euclidean_distance(points):
         # calculate Euclidean distance between the sensor frame
         # and the obstacle
+        # return distance.euclidean(points, [0,0,0])
         return np.linalg.norm(points)
+
 
     def get_obstacle(self, points):
         if points[3] < self.threshold:

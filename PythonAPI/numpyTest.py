@@ -18,8 +18,8 @@ class Sigmoid:
         self.x = np.linspace(0, 10, 1000)
         self.y = np.empty(0)
         self.d_min = 0.2
-        self.d_max = 1
-        self.F_max = 5
+        self.d_max = 3
+        self.F_max = 3
         self.F_min = 0.0
         #self.y = 1/(1  + (math.exp(self.x+10)))
 
@@ -30,7 +30,7 @@ class Sigmoid:
     def sig_plot(self, d):
 
         if d >= self.d_max:
-            self.y = 0
+            self.y = self.F_min
         elif d <= self.d_min:
             self.y = self.F_max
         else:

@@ -84,3 +84,5 @@ PythonAPI/numpyTest.py
 PythonAPI/PotentialField3D/velocities.txt
 
 no_force.txt
+
+PythonAPI/Testing/data/

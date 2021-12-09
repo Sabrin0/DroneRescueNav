@@ -6,10 +6,10 @@ class GenerateForce:
         self.gain = 5
         self.k = 2
         self.amplitude = 0.0
-        self.max_force = 5.0
+        self.max_force = 3
         self.min_force = 0.0
         self.min_distance = 0.2
-        self.max_distance = 2.0
+        self.max_distance = 2.5
 
     def get_force(self, distance):
         self.force = self.gain * np.power(np.e, (-distance / self.k))
@@ -20,7 +20,7 @@ class GenerateForce:
     def sigmoid(self, d):
         if d > self.max_distance:
             self.force = self.min_force
-        elif d < self.self.min_distnce:
+        elif d < self.min_distance:
             self.force = self.max_force
         else:
             cosarg = (d - self.min_distance) * np.pi / (self.max_distance - self.min_distance)
