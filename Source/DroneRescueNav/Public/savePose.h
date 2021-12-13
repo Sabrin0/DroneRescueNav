@@ -6,13 +6,14 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "savePose.generated.h"
 
+
 /**
  *	Save drone pose during navigation
  */
 UCLASS()
 class DRONERESCUENAV_API UsavePose : public UBlueprintFunctionLibrary
 {
-	GENERATED_BODY()
+		GENERATED_BODY()
 		// Callable from BP
 		UFUNCTION(BlueprintCallable, Category = "Custom", meta = (keywords = "save only pose"))
 

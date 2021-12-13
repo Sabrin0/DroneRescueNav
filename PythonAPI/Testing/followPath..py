@@ -54,6 +54,9 @@ class PathGenerator:
     def get_error(p2, p1):
         return abs(distance.euclidean(p2, p1))
 
+    def send_flag(self):
+        self._client.simRunConsoleCommand('ce FlagSP7')
+
 
 if __name__ == '__main__':
 
@@ -75,6 +78,7 @@ if __name__ == '__main__':
         if not obstacle:
             drone.go_pos(dest)
         else:
+            drone.send_flag()
             ff.sigmoid(obst_distance)
             vel = ff.get_vel(points[0:3])
             drone.move_by_force(-vel)
