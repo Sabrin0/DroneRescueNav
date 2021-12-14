@@ -40,6 +40,8 @@ class PathGenerator:
     def get_current_pos(self):
         self.current = self._client.getMultirotorState().kinematics_estimated.position
 
+
+
     def land(self):
         self._client.landAsync().join()
 
@@ -56,6 +58,9 @@ class PathGenerator:
 
     def send_flag(self):
         self._client.simRunConsoleCommand('ce FlagSP7')
+
+    def pause(self, is_paused):
+        self._client.simPause(is_paused)
 
 
 if __name__ == '__main__':
@@ -79,6 +84,7 @@ if __name__ == '__main__':
             drone.go_pos(dest)
         else:
             drone.send_flag()
+            drone.pause(is_paused=True)
             ff.sigmoid(obst_distance)
             vel = ff.get_vel(points[0:3])
             drone.move_by_force(-vel)
