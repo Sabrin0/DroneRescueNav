@@ -9,13 +9,24 @@ class PathGenerator:
     def __init__(self):
         self._client = airsim.MultirotorClient()
         self._client.confirmConnection()
-        self._client.enableApiControl(True, 'MainDrone')
-        self._client.armDisarm(True, 'MainDrone')
-        self._client.enableApiControl(True, 'DummyDrone')
-        self._client.armDisarm(True, 'DummyDrone')
+        self.drones = ['DummyDrone', 'MainDrone']
+
+        for name in self.drones:
+            self._client.enableApiControl(True, name)
+            self._client.armDisarm(True, name)
+            self._client.takeoffAsync(vehicle_name=name).join()
+            self._client.moveToZAsync(-3., 1., timeout_sec=3., vehicle_name=name).join()
+            print('Init drone: ', name)
+
+
         # self._client.takeoffAsync(timeout_sec=5.0).join()
-        self._client.moveToZAsync(-3., 1., timeout_sec=3., vehicle_name='MainDrone').join()
+        self.main_kin = self._client.simGetGroundTruthKinematics(vehicle_name=self.drones[1])
+        self._client.simSetKinematics(self.main_kin, ignore_collision=True, vehicle_name=self.drones[1])
+        time.sleep(1)
+        self._client.moveByVelocityBodyFrameAsync(-1.0, 0.0, 0.0, 1.0, vehicle_name=self.drones[0])
+
         self.initial_pose = self._client.getMultirotorState(vehicle_name='MainDrone').kinematics_estimated.position
+
         self.current_x = self.initial_pose
         self.duration = 0.4
         self.end_point = 15.0

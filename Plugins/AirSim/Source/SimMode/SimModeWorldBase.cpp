@@ -143,7 +143,7 @@ void ASimModeWorldBase::Tick(float DeltaSeconds)
 {
     { //keep this lock as short as possible
         physics_world_->lock();
-
+         
         physics_world_->enableStateReport(EnableReport);
         physics_world_->updateStateReport();
 
