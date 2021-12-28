@@ -9,9 +9,9 @@ class PathGenerator:
     def __init__(self):
         self._client = airsim.MultirotorClient()
         self._client.confirmConnection()
-        self.drones = ['DummyDrone', 'MainDrone']
+        self.drones_list = ['DummyDrone', 'MainDrone']
 
-        for name in self.drones:
+        for name in self.drones_list:
             self._client.enableApiControl(True, name)
             self._client.armDisarm(True, name)
             self._client.takeoffAsync(vehicle_name=name).join()
@@ -20,28 +20,35 @@ class PathGenerator:
 
 
         # self._client.takeoffAsync(timeout_sec=5.0).join()
-        self.main_kin = self._client.simGetGroundTruthKinematics(vehicle_name=self.drones[1])
-        self._client.simSetKinematics(self.main_kin, ignore_collision=True, vehicle_name=self.drones[1])
+        #self.main_kin = self._client.simGetGroundTruthKinematics(vehicle_name=self.drones[1])
+        #self._client.simSetKinematics(self.main_kin, ignore_collision=True, vehicle_name=self.drones[1])
+
+
         time.sleep(1)
-        self._client.moveByVelocityBodyFrameAsync(-1.0, 0.0, 0.0, 1.0, vehicle_name=self.drones[0])
+        self._client.moveByVelocityBodyFrameAsync(-1.0, 0.0, 0.0, 1.0, vehicle_name=self.drones_list[0])
 
         self.initial_pose = self._client.getMultirotorState(vehicle_name='MainDrone').kinematics_estimated.position
-
+        self.pose = self._client.simGetVehiclePose(vehicle_name='MainDrone')
+        self._client.simSetVehiclePose(pose=self.pose, vehicle_name='DummyDrone', ignore_collision=True)
+        #time.sleep(1)
         self.current_x = self.initial_pose
-        self.duration = 0.4
+        self.duration = 0.6
         self.end_point = 15.0
 
     def go_pos(self, destination):
-        self._client.moveToPositionAsync(
-            self.initial_pose.x_val + self.end_point,
-            self.initial_pose.y_val,
-            self.initial_pose.z_val,
-            1,
-            timeout_sec=self.duration,
-            drivetrain=airsim.DrivetrainType.ForwardOnly,
-            yaw_mode=airsim.YawMode(False, 0),
-            vehicle_name='MainDrone'
-        )
+
+        for name in self.drones_list:
+            self._client.moveToPositionAsync(
+                self.initial_pose.x_val + self.end_point,
+                self.initial_pose.y_val,
+                self.initial_pose.z_val,
+                1,
+                timeout_sec=self.duration,
+                drivetrain=airsim.DrivetrainType.ForwardOnly,
+                yaw_mode=airsim.YawMode(False, 0),
+                vehicle_name=name
+            )
+            time.sleep(self.duration/2)
 
     def go(self):
         self._client.moveByVelocityBodyFrameAsync(
@@ -122,10 +129,10 @@ if __name__ == '__main__':
         # else:
 
         if obstacle:
-            if first:
-                drone.overload()
-                first = False
-                start = time.time()
+            #if first:
+            #    drone.overload()
+            #    first = False
+            #    start = time.time()
 
             # drone.send_flag()
             # drone.pause(is_paused=True)
@@ -141,12 +148,12 @@ if __name__ == '__main__':
             vel = ff.get_vel(points[0:3])
             drone.move_by_force(-vel)
 
-            dt = time.time() - start
-            print(dt)
-            if dt > 0.3:
-                first = True
-        else:
-            first = True
+            #dt = time.time() - start
+
+            #if dt > 0.3:
+            #    first = True
+        #else:
+        #    first = True
 
         #time.sleep(drone.duration / 2)
         drone.get_current_pos()

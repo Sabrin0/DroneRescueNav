@@ -19,6 +19,7 @@ client.enableApiControl(True, vehicle_name)
 client.armDisarm(True, vehicle_name)
 client.takeoffAsync(10.0, vehicle_name)
 
+
 requests = [airsim.ImageRequest("0", airsim.ImageType.DepthVis),  #depth visualization image
             airsim.ImageRequest("1", airsim.ImageType.DepthPerspective, True), #depth in perspective projection
             airsim.ImageRequest("1", airsim.ImageType.Scene), #scene vision image in png format
