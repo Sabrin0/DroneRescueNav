@@ -1,0 +1,6 @@
+{ 
+  "position":{"min":{"x": -0.05,"y": -0.05,"z": 0.396}, "max":{"x": 0.05, "y": 0.05, "z": 0.451}, "unit":"m"},
+  "orientation":{"min":{"roll": -5,"pitch": -5 ,"yaw": -180}, "max":{"roll": 5,"pitch": 5,"yaw": 180}, "unit":"deg"},
+  "lin_vel":{"min":{"x": -0.4,"y": -0.325 ,"z": 0.240}, "max":{"x": 0.4,"y": 0.325,"z": 0.225}, "unit":"m/s"},
+  "ang_vel":{"min":{"roll": -30,"pitch": -40 ,"yaw": -50}, "max":{"roll": 30,"pitch": 40,"yaw": 50}, "unit":"deg/s"}
+}

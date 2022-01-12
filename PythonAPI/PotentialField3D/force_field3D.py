@@ -27,7 +27,6 @@ class GenerateForce:
             self.force = (self.max_force - self.min_force) * (0.5 * np.cos(cosarg) + 0.5) + self.min_force
 
     @staticmethod
-
     def save_velocities(vel):
         with open('velocities.txt', 'ab') as f:
             f.write(b"\n")

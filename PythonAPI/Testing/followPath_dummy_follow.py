@@ -1,3 +1,4 @@
+import setup_path
 import airsim
 from scipy.spatial import distance
 from PotentialField3D.lidar3D import Lidar
@@ -16,21 +17,21 @@ class PathGenerator:
             self._client.armDisarm(True, name)
             self._client.takeoffAsync(vehicle_name=name).join()
             self._client.moveToZAsync(-3., 1., timeout_sec=3., vehicle_name=name).join()
+
             print('Init drone: ', name)
 
-
         # self._client.takeoffAsync(timeout_sec=5.0).join()
-        #self.main_kin = self._client.simGetGroundTruthKinematics(vehicle_name=self.drones[1])
-        #self._client.simSetKinematics(self.main_kin, ignore_collision=True, vehicle_name=self.drones[1])
+        # self.main_kin = self._client.simGetGroundTruthKinematics(vehicle_name=self.drones[1])
+        # self._client.simSetKinematics(self.main_kin, ignore_collision=True, vehicle_name=self.drones[1])
 
-
-        time.sleep(1)
+        #time.sleep(1)
         self._client.moveByVelocityBodyFrameAsync(-1.0, 0.0, 0.0, 1.0, vehicle_name=self.drones_list[0])
 
         self.initial_pose = self._client.getMultirotorState(vehicle_name='MainDrone').kinematics_estimated.position
-        self.pose = self._client.simGetVehiclePose(vehicle_name='MainDrone')
-        self._client.simSetVehiclePose(pose=self.pose, vehicle_name='DummyDrone', ignore_collision=True)
-        #time.sleep(1)
+        # self.pose = self._client.simGetVehiclePose(vehicle_name='MainDrone')
+        self.main_state = self._client.simGetGroundTruthKinematics(vehicle_name='MainDrone')
+        self._client.simSetKinematics(self.main_state, ignore_collision=True, vehicle_name='DummyDrone')
+        # time.sleep(1)
         self.current_x = self.initial_pose
         self.duration = 0.6
         self.end_point = 15.0
@@ -48,7 +49,7 @@ class PathGenerator:
                 yaw_mode=airsim.YawMode(False, 0),
                 vehicle_name=name
             )
-            time.sleep(self.duration/2)
+            time.sleep(self.duration / 2)
 
     def go(self):
         self._client.moveByVelocityBodyFrameAsync(
@@ -65,6 +66,9 @@ class PathGenerator:
 
     def get_main_pose(self):
         return self._client.simGetVehiclePose(vehicle_name='MainDrone')
+
+    def get_main_state(self):
+        return self._client.simGetGroundTruthKinematics(vehicle_name='MainDrone')
 
     def land(self):
         self._client.landAsync(vehicle_name='MainDrone').join()
@@ -93,9 +97,11 @@ class PathGenerator:
         self._client.simAddVehicle(vehicle_name='DummyDrone', vehicle_type='simpleflight', pose=main_pose)
 
     def overload(self):
-        main_pose = self.get_main_pose()
-        self._client.simSetVehiclePose(pose=main_pose, vehicle_name='DummyDrone', ignore_collision=False)
-        self._client.hoverAsync(vehicle_name='DummyDrone')
+        #main_pose = self.get_main_pose()
+        main_state = self.get_main_state()
+        #self._client.simSetVehiclePose(pose=main_state, vehicle_name='DummyDrone', ignore_collision=False)
+        self._client.simSetKinematics(main_state, vehicle_name='DummyDrone', ignore_collision=True)
+        #self._client.hoverAsync(vehicle_name='DummyDrone')
         # self._client.simDestroyObject(object_name='DummyDrone')
 
     def request_control(self):
@@ -129,17 +135,17 @@ if __name__ == '__main__':
         # else:
 
         if obstacle:
-            #if first:
-            #    drone.overload()
-            #    first = False
-            #    start = time.time()
+            if first:
+                drone.overload()
+                first = False
+                start = time.time()
 
             # drone.send_flag()
             # drone.pause(is_paused=True)
 
             print('OBSTACLE')
 
-            # if not spawned:
+            #if not spawned:
             #    spawned = True
             #    drone.spawn_ghost()
             #    drone.request_control()
@@ -148,14 +154,14 @@ if __name__ == '__main__':
             vel = ff.get_vel(points[0:3])
             drone.move_by_force(-vel)
 
-            #dt = time.time() - start
+            dt = time.time() - start
 
-            #if dt > 0.3:
-            #    first = True
-        #else:
-        #    first = True
+            if dt > 0.5:
+                first = True
+        else:
+            first = True
 
-        #time.sleep(drone.duration / 2)
+        # time.sleep(drone.duration / 2)
         drone.get_current_pos()
         e = drone.get_error(dest, airsim.Vector3r.to_numpy_array(drone.current))
 
