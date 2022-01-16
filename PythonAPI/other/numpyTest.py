@@ -17,9 +17,9 @@ class Sigmoid:
     def __init__(self):
         self.x = np.linspace(0, 10, 1000)
         self.y = np.empty(0)
-        self.d_min = 0.2
+        self.d_min = 0
         self.d_max = 3
-        self.F_max = 3
+        self.F_max = 4.5
         self.F_min = 0.0
         #self.y = 1/(1  + (math.exp(self.x+10)))
 
@@ -49,8 +49,13 @@ if __name__ == '__main__':
     plt.ylabel('Force')
     plt.vlines(test.d_min, 0, test.F_max, colors='r', linestyles='--', label='d_min')
     plt.vlines(test.d_max, 0, test.F_max, colors='r', linestyles='--', label='d_max')
-    plt.show()
-
+    plt.vlines(1.5, 0, test.F_max, colors='tomato', linestyles='-.')
+    #plt.show()
+    dt = 0.016667
+    t = 0
+    for i in range(0, 10):
+        t += dt
+        print(t)
     """
     fig = plt.figure()
     ax = fig.gca(projection='3d')

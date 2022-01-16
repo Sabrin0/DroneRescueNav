@@ -86,8 +86,8 @@ PythonAPI/PotentialField3D/velocities.txt
 no_force.txt
 
 PythonAPI/Testing/data/
-
+PythonAPI/Testing/RC_Data/
 
 force2.txt
 
-PythonAPI/data/
+PythonAPI/other/data/

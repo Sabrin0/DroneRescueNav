@@ -11,8 +11,8 @@ class PathGenerator:
         self._client.confirmConnection()
         self._client.enableApiControl(True, 'MainDrone')
         self._client.armDisarm(True, 'MainDrone')
-        self._client.enableApiControl(True, 'DummyDrone')
-        self._client.armDisarm(True, 'DummyDrone')
+        #self._client.enableApiControl(True, 'DummyDrone')
+        #self._client.armDisarm(True, 'DummyDrone')
         # self._client.takeoffAsync(timeout_sec=5.0).join()
         self._client.moveToZAsync(-3., 1., timeout_sec=3., vehicle_name='MainDrone').join()
         self.initial_pose = self._client.getMultirotorState(vehicle_name='MainDrone').kinematics_estimated.position
@@ -57,7 +57,7 @@ class PathGenerator:
             vector_f[1].item(),
             vector_f[2].item(),
             self.duration,
-            vehicle_name='DummyDrone'
+            vehicle_name='MainDrone'
         )
 
     @staticmethod
@@ -109,12 +109,12 @@ if __name__ == '__main__':
         # if spawned and not obstacle:
         #  drone.overload()
         # else:
-
+        '''
         if obstacle:
-            if first:
-                drone.overload()
-                first = False
-                start = time.time()
+            #if first:
+            #    drone.overload()
+            #    first = False
+            #    start = time.time()
 
             # drone.send_flag()
             # drone.pause(is_paused=True)
@@ -129,14 +129,14 @@ if __name__ == '__main__':
             # ff.get_force(obst_distance)
             vel = ff.get_vel(points[0:3])
             drone.move_by_force(-vel)
-
-            dt = time.time() - start
-            print(dt)
-            if dt > 0.3:
-                first = True
-        else:
-            first = True
-
+        
+            #dt = time.time() - start
+            #print(dt)
+            #if dt > 0.3:
+            #    first = True
+        #else:
+        #    first = True
+        '''
         #time.sleep(drone.duration / 2)
         drone.get_current_pos()
         e = drone.get_error(dest, airsim.Vector3r.to_numpy_array(drone.current))

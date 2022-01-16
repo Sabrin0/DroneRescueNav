@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
 
 
-    data = np.loadtxt("data/scaled_smooth_circular.txt", dtype=float, delimiter=" ")
+    data = np.loadtxt("data/scaled_simple120.txt", dtype=float, delimiter=" ")
     #data = np.loadtxt("circular.txt", dtype=float, delimiter=" ")
     #data = np.loadtxt("UnrealCircularPath.txt", dtype=float, delimiter=" ")
     #data = np.loadtxt("x5y5.txt", dtype=float, delimiter=" ")

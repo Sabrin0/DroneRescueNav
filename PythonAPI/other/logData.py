@@ -1,5 +1,5 @@
 import airsim
-from airsimTool import to_eularian_angles
+#from airsimTool import to_eularian_angles
 import numpy as np
 import math
 
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
         #if i > 100:
         # finalData = np.append(droneData.position, droneData.orientation, axis=1)
-        np.savetxt('smooth/smooth_circular.txt', np.column_stack((droneData.time, droneData.SP7_position, droneData.SP7_orientation,
+        np.savetxt('data/api.txt', np.column_stack((droneData.time, droneData.SP7_position, droneData.SP7_orientation,
                    droneData.SP7_lin_vel, droneData.SP7_ang_vel)), fmt='%.4f',
                    delimiter=' ')
 

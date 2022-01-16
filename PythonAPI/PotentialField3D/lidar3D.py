@@ -14,7 +14,7 @@ class Lidar:
         #self.client.moveToZAsync(-3., 1., timeout_sec=1.).join()
         self.j = [0, 1]
         self.obstacle = False
-        self.threshold = 2
+        self.threshold = 1.7 #before 2
         self.range = 7
 
     def get_data(self):
@@ -76,6 +76,43 @@ class Lidar:
 
         else:
             return False, None, closest_obstacle[3]
+
+    def manage_data_updated(self):
+        self.set_threshold()
+        data = self.get_data()
+        print(self.threshold)
+        # avoid crash if the lidar laser does not hit anything
+        try:
+            matrix = self.reshape_point_cloud(data)
+            distance = np.array([np.apply_along_axis(self.euclidean_distance, axis=1, arr=matrix)])
+        except:
+
+            print('No Lidar values')
+            return False, None, self.range
+
+        matrix_d = np.append(matrix, distance.T, axis=1)
+        closest_obstacle = self.find_closer(matrix_d)
+
+        if closest_obstacle[3] < self.threshold:
+            return True, closest_obstacle[0:3], closest_obstacle[3]  # [0:3]
+
+        else:
+            return False, None, closest_obstacle[3]
+
+    def set_threshold(self):
+        # estimate velocity
+        drone_vel_vector3r = self.client.getMultirotorState().kinematics_estimated.linear_velocity
+        # to numpy array
+        drone_vel = airsim.Vector3r.to_numpy_array(drone_vel_vector3r)
+        # get abs value
+        np.abs(drone_vel)
+        # set threshold depending on current speed
+        if np.amax(drone_vel) >= 4.0:
+            self.threshold = 3
+        elif 2.0 <= np.amax(drone_vel) < 4.0:
+            self.threshold = 2.2
+        elif np.amax(drone_vel) < 2.0:
+            self.threshold = 1.7
 
     @staticmethod
     def find_closer(matrix):
